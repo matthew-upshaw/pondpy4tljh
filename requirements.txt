@@ -1,0 +1,2 @@
+notebook==7.2.1
+pondpy==0.2.0

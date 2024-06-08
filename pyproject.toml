@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pondpy4tljh"
+version = "0.1.0"
+description = "Pondpy user interface for use with TLJH"
+authors = ["matthew-upshaw <matthew.upshaw02@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pondpy = "^0.2.0"
+notebook = "^7.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
