@@ -3,6 +3,7 @@ from pondpy4tljh import (
     JoistSizeError,
     InvalidSupportError,
     TextColor,
+    create_pondpy_models,
     package_input,
     validate_input,
 )
@@ -15,6 +16,7 @@ def analyze_roof_bays(**kwargs):
     ----------
     kwargs : key, value pair
         key, value pair to be entered into the dictionary
+        
     Returns
     -------
     pondpy_models : list
@@ -27,7 +29,7 @@ def analyze_roof_bays(**kwargs):
     # Validate the user input using the validate_input() helper function
     print(TextColor.DARKCYAN+TextColor.BOLD+'Validating the input...'+TextColor.END)
     try:
-        validate_input(user_input)
+        input_valid = validate_input(user_input)
     except KeyError as e:
         print(TextColor.RED+TextColor.BOLD+f'Validation failed!\nExpected {e} as input key but did not receive it. Please check your inputs.')
     except TypeError as e:
@@ -39,4 +41,21 @@ def analyze_roof_bays(**kwargs):
     except InvalidSupportError as e:
         print(TextColor.RED+TextColor.BOLD+f'Validation failed!\n{e} is not a valid support type.'+TextColor.END)
     else:
-        print(TextColor.GREEN+TextColor.BOLD+'Input successfully validated!'+TextColor.BOLD)
+        print(TextColor.GREEN+TextColor.BOLD+'Input successfully validated!'+TextColor.END)
+
+    # Create the pondpy models
+    if input_valid:
+        print(TextColor.DARKCYAN+TextColor.BOLD+f'Creating the PondPyModel objects for {user_input['n_roof_bays']} roof bays...'+TextColor.END)
+
+        pondpy_models = create_pondpy_models(user_input=user_input)
+
+        print(TextColor.GREEN+TextColor.BOLD+f'Successfully created the PondPyModel objects for {user_input['n_roof_bays']} roof bays!'+TextColor.END)
+
+        for bay in range(user_input['n_roof_bays']):
+            print(TextColor.DARKCYAN+TextColor.BOLD+f'Analyzing the PondPyModel object for roof bay {bay+1}...'+TextColor.END)
+
+            pondpy_models[bay].perform_analysis()
+
+            print(TextColor.GREEN+TextColor.BOLD+f'Successfully analyzed roof bay {bay+1}!'+TextColor.END)
+
+    return pondpy_models
