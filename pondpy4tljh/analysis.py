@@ -44,12 +44,13 @@ def analyze_roof_bays(**kwargs):
         print(TextColor.GREEN+TextColor.BOLD+"Input successfully validated!"+TextColor.END)
 
     # Create the pondpy models
+    n_roof_bays = user_input['n_roof_bays']
     if input_valid:
-        print(TextColor.DARKCYAN+TextColor.BOLD+f"Creating the PondPyModel objects for {user_input['n_roof_bays']} roof bays..."+TextColor.END)
+        print(TextColor.DARKCYAN+TextColor.BOLD+f"Creating the PondPyModel objects for {n_roof_bays} roof bays..."+TextColor.END)
 
         pondpy_models = create_pondpy_models(user_input=user_input)
 
-        print(TextColor.GREEN+TextColor.BOLD+f"Successfully created the PondPyModel objects for {user_input['n_roof_bays']} roof bays!"+TextColor.END)
+        print(TextColor.GREEN+TextColor.BOLD+f"Successfully created the PondPyModel objects for {n_roof_bays} roof bays!"+TextColor.END)
 
         for bay in range(user_input['n_roof_bays']):
             print(TextColor.DARKCYAN+TextColor.BOLD+f"Analyzing the PondPyModel object for roof bay {bay+1}..."+TextColor.END)
