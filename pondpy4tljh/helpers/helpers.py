@@ -19,8 +19,9 @@ from .exceptions import (
     InvalidSupportError,
 )
 
-AVAILABLE_BEAMS = aisc.profiles['W_shapes'].sections.keys()
-AVAILABLE_JOISTS = sji.joist_type['K_Series'].designations.keys()
+AVAILABLE_BEAMS = list(aisc.profiles['W_shapes'].sections.keys())
+AVAILABLE_JOISTS = list(sji.joist_type['K_Series'].designations.keys())
+AVAILABLE_JOISTS.extend(list(sji.joist_type['KCS_Series'].designations.keys()))
 CONV_PSF_TO_KSI = 1/144/1000
 VALID_SUPPORTS = {
     'ROLLER':(0, 1, 0),
@@ -163,7 +164,12 @@ def create_pondpy_models(user_input):
     # Start by creating a dictionary of pondpy.SteelBeamSize and pondpy.SteelJoistSize
     # objects for each beam and joist size in the user input
     beams = { beam.upper():SteelBeamSize(name=beam.upper(), properties=aisc.W_shapes.sections[beam.upper()]) for beam in user_input['beam_sizes'] }
-    joists = { joist.upper():SteelJoistSize(name=joist.upper(), properties=sji.K_Series.designations['K_'+joist.upper()]) for joist in user_input['joist_sizes'] }
+    joists = {}
+    for joist in user_input:
+        if 'KCS' in joist.upper():
+            joists[joist.upper()] = SteelJoistSize(name=joist.upper(), properties=sji.KCS_Series.designations['KCS_'+joist.upper()])
+        else:
+            joists[joist.upper()] = SteelJoistSize(name=joist.upper(), properties=sji.K_Series.designations['K_'+joist.upper()])
     active_sizes = beams | joists
     
     # Next create the pondpy.PrimaryMember and primary.SecondaryMember objects
