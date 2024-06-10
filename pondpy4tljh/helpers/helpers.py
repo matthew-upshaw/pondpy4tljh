@@ -165,7 +165,7 @@ def create_pondpy_models(user_input):
     # objects for each beam and joist size in the user input
     beams = { beam.upper():SteelBeamSize(name=beam.upper(), properties=aisc.W_shapes.sections[beam.upper()]) for beam in user_input['beam_sizes'] }
     joists = {}
-    for joist in user_input:
+    for joist in user_input['joist_sizes']:
         if 'KCS' in joist.upper():
             joists[joist.upper()] = SteelJoistSize(name=joist.upper(), properties=sji.KCS_Series.designations['KCS_'+joist.upper()])
         else:

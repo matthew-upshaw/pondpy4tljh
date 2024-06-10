@@ -12,4 +12,6 @@ from pondpy4tljh.helpers.exceptions import (
 
 from pondpy4tljh.helpers.text_colors import TextColor
 
-from .analysis import analyze_roof_bays
+from .analyze_roof_bay import analyze_roof_bays
+
+from .show_analysis_summary import show_analysis_summary
