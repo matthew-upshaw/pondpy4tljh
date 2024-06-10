@@ -1,5 +1,5 @@
 from pondpy4tljh.helpers.helpers import (
-    create_pondpy_models,
+    create_and_analyze_pondpy_models,
     package_input,
     validate_input,
 )

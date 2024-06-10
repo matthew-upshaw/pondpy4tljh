@@ -3,7 +3,7 @@ from pondpy4tljh import (
     JoistSizeError,
     InvalidSupportError,
     TextColor,
-    create_pondpy_models,
+    create_and_analyze_pondpy_models,
     package_input,
     validate_input,
 )
@@ -29,24 +29,11 @@ def analyze_roof_bays(**kwargs):
     # Validate the user input using the validate_input() helper function
     print(TextColor.DARKCYAN+TextColor.BOLD+"Validating the input..."+TextColor.END)
     try:
-        input_valid = validate_input(user_input)
+        validate_input(user_input)
         print(TextColor.GREEN+TextColor.BOLD+"Input successfully validated!"+TextColor.END)
         
         # Create the pondpy models
-        n_roof_bays = user_input['n_roof_bays']
-        
-        print(TextColor.DARKCYAN+TextColor.BOLD+f"Creating the PondPyModel objects for {n_roof_bays} roof bays..."+TextColor.END)
-
-        pondpy_models = create_pondpy_models(user_input=user_input)
-
-        print(TextColor.GREEN+TextColor.BOLD+f"Successfully created the PondPyModel objects for {n_roof_bays} roof bays!"+TextColor.END)
-
-        for bay in range(user_input['n_roof_bays']):
-            print(TextColor.DARKCYAN+TextColor.BOLD+f"Analyzing the PondPyModel object for roof bay {bay+1}..."+TextColor.END)
-
-            pondpy_models[bay].perform_analysis()
-
-            print(TextColor.GREEN+TextColor.BOLD+f"Successfully analyzed roof bay {bay+1}!"+TextColor.END)
+        pondpy_models = create_and_analyze_pondpy_models(user_input=user_input)
 
         return pondpy_models
 

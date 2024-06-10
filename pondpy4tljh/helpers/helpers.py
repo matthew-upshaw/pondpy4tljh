@@ -19,6 +19,10 @@ from .exceptions import (
     InvalidSupportError,
 )
 
+from .text_colors import (
+    TextColor,
+)
+
 AVAILABLE_BEAMS = list(aisc.profiles['W_shapes'].sections.keys())
 AVAILABLE_JOISTS = list(sji.joist_type['K_Series'].designations.keys())
 AVAILABLE_JOISTS.extend(list(sji.joist_type['KCS_Series'].designations.keys()))
@@ -118,7 +122,7 @@ def validate_input(user_input):
         
     # Check that all input joist sizes are available
     for size in user_input['joist_sizes']:
-        if ('K_'+size.upper()) not in AVAILABLE_JOISTS:
+        if ('K_'+size.upper()) not in AVAILABLE_JOISTS and ('KCS_'+size.upper()) not in AVAILABLE_JOISTS:
             raise JoistSizeError(f'{size}')
         
     # Check that all input primary support types are valid
@@ -144,9 +148,9 @@ def validate_input(user_input):
     
     return True
         
-def create_pondpy_models(user_input):
+def create_and_analyze_pondpy_models(user_input):
     '''
-    Creates the SteelBeamSize adn SteelJoistSize objects for each beam and joist
+    Creates the SteelBeamSize and SteelJoistSize objects for each beam and joist
     size in the user input
 
     Parameters
@@ -178,6 +182,7 @@ def create_pondpy_models(user_input):
     secondary_members = []
 
     for bay in range(user_input['n_roof_bays']):
+
         cur_primary_members = []
         for mem in range(len(user_input['primary_members_size'][bay])):
             cur_supports = []
@@ -231,13 +236,26 @@ def create_pondpy_models(user_input):
     pondpy_models = []
 
     for bay in range(user_input['n_roof_bays']):
-        pondpy_models.append(PondPyModel(
+
+        print(TextColor.DARKCYAN+TextColor.BOLD+f"Creating the PondPyModel objects for roof bay {bay+1}..."+TextColor.END)
+        
+        cur_model = PondPyModel(
             primary_framing=primary_framing[bay],
             secondary_framing=secondary_framing[bay],
             loading=loading[bay],
             mirrored_left=user_input['roof_bay_mirrored'][bay][0],
             mirrored_right=user_input['roof_bay_mirrored'][bay][1],
             show_results=False,
-        ))
+        )
+
+        print(TextColor.GREEN+TextColor.BOLD+f"Successfully created the PondPyModel object for roof bay {bay+1}!"+TextColor.END)
+            
+        print(TextColor.DARKCYAN+TextColor.BOLD+f"Analyzing the PondPyModel object for roof bay {bay+1}..."+TextColor.END)
+
+        cur_model.perform_analysis()
+
+        print(TextColor.GREEN+TextColor.BOLD+f"Successfully analyzed roof bay {bay+1}!"+TextColor.END)
+
+        pondpy_models.append(cur_model)
 
     return pondpy_models
