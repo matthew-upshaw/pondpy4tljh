@@ -4,6 +4,10 @@ from pondpy4tljh.helpers.helpers import (
     validate_input,
 )
 
+from pondpy4tljh.helpers.widget_helpers import (
+    create_plot_widget,
+)
+
 from pondpy4tljh.helpers.exceptions import (
     BeamSizeError,
     JoistSizeError,
